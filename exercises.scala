@@ -1,4 +1,5 @@
 import scala.collection.immutable.IndexedSeq
+import scala.collection.mutable.ArrayBuffer
 import scala.math.pow
 
 // 2.1
@@ -44,10 +45,7 @@ def unicodeProduct(s: String) : Int = {
 
 // 2.7
 def unicodeProductNoLoop(s: String) : Int = {
-  val s2 : IndexedSeq[Byte] = s map (c => c.toByte)
-  s2.foldLeft(1) { (total, n) =>
-    total * n
-  }
+  s.getBytes("UTF8").foldLeft(1)(_*_)
 }
 
 // 2.8
@@ -63,4 +61,33 @@ def recurProduct(s: String, start: Int = 1) : Int = {
 // This one is kind of dumb, just turns out to be silly algebra gotcha.
 def xToThe(x: Double, n: Int) : Double = {
   pow(x, n)
+}
+
+// 3.1
+def arrayOfN(n: Int) : Array = { (0 until 10) to Array }
+
+// 3.2
+def swapInPlace(arr: Array[Int]) {
+  // Iterate over only even-indexed elements
+  for (i <- 0 until arr.length - 1 if i % 2 == 0) {
+    var old = arr(i)
+    arr(i) = arr(i + 1)
+    arr(i + 1) = old
+  }
+}
+
+// 3.3
+def swapNewArray(arr: Array[Int]) : Array[Int] = {
+  val first : Int = (arr.length + 1) / 2
+  val sorted : Array[Int] = arr.sortBy(e => arr.indexOf(e) % 2 == 0)
+  val left : Array[Int] = sorted.take(first)
+  val right : Array[Int] = sorted.takeRight(arr.length - first)
+  var buf = ArrayBuffer[Int]()
+  for (i <- 0 until (left.length)) {
+    buf += left(i)
+    try {
+      buf += right(i)
+    }
+  }
+  buf.toArray
 }
