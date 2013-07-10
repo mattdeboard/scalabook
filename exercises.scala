@@ -1,6 +1,6 @@
 import scala.collection.immutable.IndexedSeq
 import scala.collection.mutable.ArrayBuffer
-import scala.math.pow
+import scala.math.{min, pow}
 
 // 2.1
 def getSignum(n: Int) : Int = {
@@ -89,5 +89,18 @@ def swapNewArray(arr: Array[Int]) : Array[Int] = {
       buf += right(i)
     }
   }
+  buf.toArray
+}
+
+def interleave(arr0: Array[Int], arr1: Array[Int]) : Array[Int] = {
+  val shortest : Int = min(arr0.length, arr1.length)
+  var buf = ArrayBuffer[Int]()
+  for (i <- 0 until shortest) {
+    buf += arr1(i)
+    buf += arr0(i)
+  }
+  val longest : List[Array[Int]] = List(arr0, arr1).filterNot(arr =>
+    arr.length == shortest)
+  if (longest.length > 0) longest(0).takeRight(longest.length - shortest).copyToBuffer(buf)
   buf.toArray
 }
